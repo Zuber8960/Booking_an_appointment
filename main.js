@@ -27,10 +27,10 @@ let liTag;
 //     itemList.appendChild(li);
 // }
 
-//-------Display the data from server to UI
-//axios
+//-------Display the data from server to UI after each time refresh screen
+//axios.get request to gitting data from crudcrud to UI.
 window.addEventListener('DOMContentLoaded',()=>{
-    axios.get("https://crudcrud.com/api/b946afa94cb74e5c87b5baf5d7ad470e/appointment")
+    axios.get("https://crudcrud.com/api/d2e24d1f7b694ca48c6d90b659747603/appointment")
     .then((response)=>{
         response.data.forEach((ele)=>{
             showNewUserOnscreen(ele);
@@ -44,10 +44,10 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 
 
+
+
 //form submit event:
 form.addEventListener('submit', addItem);
-
-
 
 
 function addItem(e) {
@@ -61,20 +61,20 @@ function addItem(e) {
     liTag = itemList.querySelectorAll('li');
     console.log(liTag);
 
-    Array.from(liTag).forEach(function (item) {
-        let itemEmail = item.childNodes[2].textContent;
-        if ((itemEmail.indexOf(email) != -1)) {
-            item.style.display = 'none';
-        }
-    })
+    // //when same details has entered then not be displayed.
+    // Array.from(liTag).forEach(function (item) {
+    //     let itemEmail = item.childNodes[2].textContent;
+    //     if ((itemEmail.indexOf(email) != -1)) {
+    //         item.style.display = 'none';
+    //     }
+    // })
 
     let obj = {
         name,
         email
     };
 
-
-    axios.post("https://crudcrud.com/api/b946afa94cb74e5c87b5baf5d7ad470e/appointment", obj)
+    axios.post("https://crudcrud.com/api/d2e24d1f7b694ca48c6d90b659747603/appointment", obj)
         .then((responce) => {
             showNewUserOnscreen(responce.data);
             console.log(responce.data);
@@ -87,36 +87,30 @@ function addItem(e) {
     // localStorage.setItem(`${obj.email}`, JSON.stringify(obj));
 
     // showNewUserOnscreen(obj);
-    // creating of list of user.
 
 }
 
 
-//delete itam event
-itemList.addEventListener('click', removeItem);
+// //delete itam event
+// itemList.addEventListener('click', removeItem);
 
-function removeItem(e) {
-    // console.log(1);
-    if (e.target.classList.contains('delete')) {
-        // console.log(1);
-        if (confirm('Are you sure?')) {
-            li = e.target.parentElement;
+// function removeItem(e) {
+//     // console.log(1);
+//     if (e.target.classList.contains('delete')) {
+//         // console.log(1);
+//         if (confirm('Are you sure?')) {
+//             li = e.target.parentElement;
 
-            let key = li.childNodes[2].textContent;
-            key = JSON.stringify(key);
-            // console.log(key);
-            localStorage.removeItem(JSON.parse(key));
+//             let key = li.childNodes[2].textContent;
+//             key = JSON.stringify(key);
+//             // console.log(key);
+//             localStorage.removeItem(JSON.parse(key));
 
-            itemList.removeChild(li);
-        }
-    }
+//             itemList.removeChild(li);
+//         }
+//     }
 
-
-
-
-
-
-}
+// }
 
 //for display list on screen
 function showNewUserOnscreen(obj) {
@@ -142,25 +136,22 @@ function showNewUserOnscreen(obj) {
 
 
 
-//edit button event
-itemList.addEventListener('click', editItam);
+// //edit button event
+// itemList.addEventListener('click', editItam);
 
-function editItam(e) {
-    console.log(1);
-    li = e.target.parentElement;
-    let nameVal = li.childNodes[0].textContent;
-    let emailVal = li.childNodes[2].textContent;
-    // console.log(nameVal);
-    // console.log(emailVal);
-    let name = document.getElementById('name');
-    let email = document.getElementById('email');
+// function editItam(e) {
+//     console.log(1);
+//     li = e.target.parentElement;
+//     let nameVal = li.childNodes[0].textContent;
+//     let emailVal = li.childNodes[2].textContent;
+//     // console.log(nameVal);
+//     // console.log(emailVal);
+//     let name = document.getElementById('name');
+//     let email = document.getElementById('email');
 
-    name.value = nameVal;
-    email.value = emailVal;
-
-}
-
-
+//     name.value = nameVal;
+//     email.value = emailVal;
+// }
 
 
 
