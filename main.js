@@ -29,18 +29,22 @@ let liTag;
 
 //-------Display the data from server to UI after each time refresh screen
 //axios.get request to gitting data from crudcrud to UI.
-window.addEventListener('DOMContentLoaded',()=>{
-    axios.get("https://crudcrud.com/api/fbd49c1906a5445d8dea0fba55c7e4a3/appointment")
-    .then((response)=>{
-        response.data.forEach((ele)=>{
-            showNewUserOnscreen(ele);
-            console.log(ele.name);
-        })
+function update() {
+    window.addEventListener('DOMContentLoaded', () => {
+        axios.get("https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment")
+            .then((response) => {
+                response.data.forEach((ele) => {
+                    showNewUserOnscreen(ele);
+                    console.log(ele.name);
+                })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     })
-    .catch((err) => {
-        console.log(err);
-    })
-})
+}
+update();
+
 
 
 
@@ -58,23 +62,39 @@ function addItem(e) {
         return alert("field is empty?");
     }
 
-    liTag = itemList.querySelectorAll('li');
-    console.log(liTag);
+    //when same details has entered then not be displayed.
+    function updateList() {
+        liTag = itemList.querySelectorAll('li');
+        console.log(liTag);
 
-    // //when same details has entered then not be displayed.
-    // Array.from(liTag).forEach(function (item) {
-    //     let itemEmail = item.childNodes[2].textContent;
-    //     if ((itemEmail.indexOf(email) != -1)) {
-    //         item.style.display = 'none';
-    //     }
-    // })
+        Array.from(liTag).forEach(function (item) {
+            let itemEmail = item.childNodes[2].textContent;
+            if ((itemEmail.indexOf(email) != -1)) {
+                item.style.display = 'none';
+            }
+        })
+    }
+
 
     let obj = {
         name,
         email
     };
 
-    axios.post("https://crudcrud.com/api/fbd49c1906a5445d8dea0fba55c7e4a3/appointment", obj)
+    axios.get("https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment")
+        .then((response) => {
+            response.data.forEach((ele) => {
+                if (ele.email == email) {
+                    updateList();
+                    axios.delete('https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment/' + `${ele._id}`)
+                }
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    axios.post("https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment", obj)
         .then((responce) => {
             showNewUserOnscreen(responce.data);
             console.log(responce.data);
@@ -82,7 +102,6 @@ function addItem(e) {
         .catch((err) => {
             console.log(err);
         })
-
 
     // localStorage.setItem(`${obj.email}`, JSON.stringify(obj));
 
@@ -106,14 +125,14 @@ function removeItem(e) {
 
             itemList.removeChild(li);
 
-            axios.get("https://crudcrud.com/api/fbd49c1906a5445d8dea0fba55c7e4a3/appointment")
-            .then((response)=>{
-                response.data.forEach((ele)=>{
-                    if(ele.email==key){
-                        axios.delete('https://crudcrud.com/api/fbd49c1906a5445d8dea0fba55c7e4a3/appointment/'+`${ele._id}`)
-                    }
-                })
-            }).catch((err)=>console.log(err));
+            axios.get("https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment")
+                .then((response) => {
+                    response.data.forEach((ele) => {
+                        if (ele.email == key) {
+                            axios.delete('https://crudcrud.com/api/3b45e45b3d784b90b552f302cb94f437/appointment/' + `${ele._id}`)
+                        }
+                    })
+                }).catch((err) => console.log(err));
         }
     }
 
@@ -143,22 +162,22 @@ function showNewUserOnscreen(obj) {
 
 
 
-// //edit button event
-// itemList.addEventListener('click', editItam);
+//edit button event
+itemList.addEventListener('click', editItam);
 
-// function editItam(e) {
-//     console.log(1);
-//     li = e.target.parentElement;
-//     let nameVal = li.childNodes[0].textContent;
-//     let emailVal = li.childNodes[2].textContent;
-//     // console.log(nameVal);
-//     // console.log(emailVal);
-//     let name = document.getElementById('name');
-//     let email = document.getElementById('email');
+function editItam(e) {
+    // console.log(1);
+    li = e.target.parentElement;
+    let nameVal = li.childNodes[0].textContent;
+    let emailVal = li.childNodes[2].textContent;
+    // console.log(nameVal);
+    // console.log(emailVal);
+    let name = document.getElementById('name');
+    let email = document.getElementById('email');
 
-//     name.value = nameVal;
-//     email.value = emailVal;
-// }
+    name.value = nameVal;
+    email.value = emailVal;
+}
 
 
 
